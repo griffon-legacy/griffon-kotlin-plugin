@@ -62,6 +62,7 @@ target(name: 'compileKotlinSrc', description: 'Compiles Kotlin sources', prehook
     }
     
     // TODO check sources are up to date
+    if(sourcesUpToDate(kotlinSrcDir, projectMainClassesDir, '.kt')) return
 
     try {
         ant.kotlinc(

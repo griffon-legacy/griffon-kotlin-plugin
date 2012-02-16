@@ -38,7 +38,7 @@ class KotlinGriffonPlugin {
     // URL where documentation can be found
     String documentation = ''
     // URL where source can be found
-    String source = ''
+    String source = 'https://github.com/griffon/griffon-kotlin-plugin'
 
     List authors = [
         [
