@@ -24,7 +24,7 @@ griffon.project.dependency.resolution = {
     }
     dependencies {
         String asmVersion = '3.3.1'
-        String kotlinVersion = '1.0-preview'
+        String kotlinVersion = '280212-cf73c1f3'
         build "com.jetbrains.kotlin:kotlin-annotations:$kotlinVersion",
               "com.jetbrains.kotlin:kotlin-cli:$kotlinVersion",
               "com.jetbrains.kotlin:kotlin-intellij-core:$kotlinVersion",
