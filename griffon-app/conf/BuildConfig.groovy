@@ -10,13 +10,13 @@ griffon.project.dependency.resolution = {
     // slf4jVersion:   bundled Slf4j
 
     // inherit Griffon' default dependencies
-    inherits("global") {
-    }
-    log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+    inherits "global"
+    log "warn"
     repositories {
         griffonHome()
         mavenCentral()
         mavenRepo 'http://repository.sonatype.org/content/groups/public'
+        mavenRepo 'http://repository.jetbrains.com/releases'
 
         // pluginDirPath is only available when installed
         String basePath = pluginDirPath? "${pluginDirPath}/" : ''
@@ -24,20 +24,24 @@ griffon.project.dependency.resolution = {
     }
     dependencies {
         String asmVersion = '3.3.1'
-        String kotlinVersion = '280212-cf73c1f3'
-        build "com.jetbrains.kotlin:kotlin-annotations:$kotlinVersion",
+        String kotlinVersion = '0.1.2090'
+        build "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion",
+              "com.jetbrains.kotlin:kotlin-annotations:$kotlinVersion",
               "com.jetbrains.kotlin:kotlin-cli:$kotlinVersion",
               "com.jetbrains.kotlin:kotlin-intellij-core:$kotlinVersion",
               "com.jetbrains.kotlin:kotlin-picocontainer:$kotlinVersion",
               "com.jetbrains.kotlin:kotlin-trove4j:$kotlinVersion",
               "com.jetbrains.kotlin:kotlin-build-tools:$kotlinVersion",
               "com.jetbrains.kotlin:kotlin-compiler:$kotlinVersion",
-              "com.jetbrains.kotlin:kotlin-runtime:$kotlinVersion",
+              "com.jetbrains.kotlin:kotlin-jet-lang:$kotlinVersion",
+              "com.jetbrains.kotlin:kotlin-jdk-headers:$kotlinVersion",
+              "asm:asm:$asmVersion",
+              "asm:asm-tree:$asmVersion",
               "asm:asm-commons:$asmVersion",
               "asm:asm-util:$asmVersion",
-              "asm:asm:$asmVersion",
-              "com.google.guava:guava:11.0.1"
-        compile "com.jetbrains.kotlin:kotlin-runtime:$kotlinVersion"
+              "asm:asm-analysis:$asmVersion",
+              "com.google.guava:guava:11.0.2"
+        compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     }
 }
 

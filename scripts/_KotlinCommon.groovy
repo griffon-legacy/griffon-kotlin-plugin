@@ -25,8 +25,6 @@ includePluginScript('lang-bridge', '_Commons')
 target(name: 'compileKotlinSrc', description: 'Compiles Kotlin sources', prehook: null, posthook: null) {
     depends(classpath, compileCommons)
 
-    ant.taskdef(resource: 'org/jetbrains/jet/buildtools/ant/antlib.xml')
-
     String classpathId = 'kotlin.compile.classpath'
     ant.path(id: classpathId) {
         path(refid: 'griffon.compile.classpath')
@@ -65,11 +63,20 @@ target(name: 'compileKotlinSrc', description: 'Compiles Kotlin sources', prehook
     if(sourcesUpToDate(kotlinSrcDir, projectMainClassesDir, '.kt')) return
 
     try {
-        ant.kotlinc(
+        List urls = classpathToUrls(classpathId)
+        URLClassLoader kotlinClassLoader = new URLClassLoader(rootLoader.URLs, ClassLoader.getSystemClassLoader())
+        def kant = kotlinClassLoader.loadClass('groovy.util.AntBuilder').newInstance()
+        kant.path(id: 'kotlin.classpath') {
+            for(url in urls) {
+                pathelement location: url
+            }
+        } 
+        kant.taskdef(resource: 'org/jetbrains/jet/buildtools/ant/antlib.xml', classpathref: 'kotlin.classpath')
+        
+        kant.kotlinc(
             output: projectMainClassesDir,
             src: kotlinSrc,
-            classpathref: classpathId
-        )
+            classpathref: 'kotlin.classpath')
     } catch(Exception e) {
         if(argsMap.compileTrace) {
             GriffonExceptionHandler.sanitize(e)
