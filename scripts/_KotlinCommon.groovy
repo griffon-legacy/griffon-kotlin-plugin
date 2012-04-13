@@ -21,20 +21,19 @@
 import griffon.util.GriffonExceptionHandler
 
 includePluginScript('lang-bridge', '_Commons')
-
+  
 target(name: 'compileKotlinSrc', description: 'Compiles Kotlin sources', prehook: null, posthook: null) {
     depends(classpath, compileCommons)
 
+    ant.path(id : 'kotlinJars') {
+       fileset(dir: "${kotlinPluginDir}/lib/kotlin/lib" , includes : '*.jar')
+    }
+
     String classpathId = 'kotlin.compile.classpath'
     ant.path(id: classpathId) {
+        path(refid: 'kotlinJars')
         path(refid: 'griffon.compile.classpath')
         pathElement(location: projectMainClassesDir)
-        for (File f in griffonSettings.buildDependencies) {
-            if (f && f.exists()) {
-                pathelement(location: f.absolutePath)
-                addUrlIfNotPresent rootLoader, f
-            }
-        }
     }
 
     if (argsMap.compileTrace) {
@@ -63,20 +62,13 @@ target(name: 'compileKotlinSrc', description: 'Compiles Kotlin sources', prehook
     if(sourcesUpToDate(kotlinSrcDir, projectMainClassesDir, '.kt')) return
 
     try {
-        List urls = classpathToUrls(classpathId)
-        URLClassLoader kotlinClassLoader = new URLClassLoader(rootLoader.URLs, ClassLoader.getSystemClassLoader())
-        def kant = kotlinClassLoader.loadClass('groovy.util.AntBuilder').newInstance()
-        kant.path(id: 'kotlin.classpath') {
-            for(url in urls) {
-                pathelement location: url
-            }
-        } 
-        kant.taskdef(resource: 'org/jetbrains/jet/buildtools/ant/antlib.xml', classpathref: 'kotlin.classpath')
+        ant.taskdef(resource: 'org/jetbrains/jet/buildtools/ant/antlib.xml',
+                classpathref: classpathId)
         
-        kant.kotlinc(
+        ant.kotlinc(
             output: projectMainClassesDir,
             src: kotlinSrc,
-            classpathref: 'kotlin.classpath')
+            classpathref: classpathId)
     } catch(Exception e) {
         if(argsMap.compileTrace) {
             GriffonExceptionHandler.sanitize(e)
