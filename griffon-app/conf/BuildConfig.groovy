@@ -20,11 +20,11 @@ griffon.project.dependency.resolution = {
         /*
         // pluginDirPath is only available when installed
         String basePath = pluginDirPath? "${pluginDirPath}/" : ''
-        flatDir name: "kotlinLibDir", dirs: ["${basePath}lib"]
+        flatDir name: "kotlinLibDir", dirs: ["${basePath}lib/kotlin/lib"]
         */
     }
     dependencies {
-        String kotlinVersion = '0.1.2090'
+        String kotlinVersion = '0.1.2580'
         compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
     }
 }

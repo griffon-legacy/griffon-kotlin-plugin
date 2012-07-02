@@ -26,10 +26,15 @@ eventCompileStart = {
 }
  
 eventStatsStart = { pathToInfo ->
+    String filetype = '.kt'
     if(!pathToInfo.find{ it.path == 'src.commons'} ) {
         pathToInfo << [name: 'Common Sources', path: 'src.commons', filetype: ['.groovy','.java']]
     }
     if(!pathToInfo.find{ it.path == 'src.kotlin'} ) {
-        pathToInfo << [name: 'Kotlin Sources', path: 'src.kotlin', filetype: ['.kt', '.kts', '.jetl']]
+        pathToInfo << [name: 'Kotlin Sources', path: 'src.kotlin', filetype: [filetype]]
+    }
+    ['models', 'views', 'controllers', 'services'].each { path ->
+        List filetypes = pathToInfo.find { it.path == path }.filetype
+        if (!filetypes.contains(filetype)) filetypes << filetype
     }
 }

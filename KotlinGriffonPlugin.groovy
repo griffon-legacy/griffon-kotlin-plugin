@@ -21,9 +21,9 @@ class KotlinGriffonPlugin {
     // the plugin version
     String version = '0.2'
     // the version or versions of Griffon the plugin is designed for
-    String griffonVersion = '0.9.5 > *'
+    String griffonVersion = '1.0.0 > *'
     // the other plugins this plugin depends on
-    Map dependsOn = ['lang-bridge': '0.5']
+    Map dependsOn = ['lang-bridge': '0.6.1']
     // resources that are included in plugin packaging
     List pluginIncludes = []
     // the plugin license

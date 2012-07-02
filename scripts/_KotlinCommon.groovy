@@ -51,9 +51,9 @@ target(name: 'compileKotlinSrc', description: 'Compiles Kotlin sources', prehook
     def kotlinSrc = "${basedir}/src/kotlin"
     ant.mkdir(dir: kotlinSrc)
     def kotlinSrcDir = new File(kotlinSrc)
-    // def kotlinArtifactSrc = resolveResources("file:/${basedir}/griffon-app/**/*.kt")
+    def kotlinArtifactSrc = resolveResources("file:/${basedir}/griffon-app/**/*.kt")
 
-    if(/*!kotlinArtifactSrc &&*/ !kotlinSrcDir.list().size()) {
+    if(!kotlinArtifactSrc && !kotlinSrcDir.list().size()) {
         ant.echo(message: "[kotlin] No Kotlin sources were found.")
         return
     }
@@ -62,13 +62,20 @@ target(name: 'compileKotlinSrc', description: 'Compiles Kotlin sources', prehook
     if(sourcesUpToDate(kotlinSrcDir, projectMainClassesDir, '.kt')) return
 
     try {
-        ant.taskdef(resource: 'org/jetbrains/jet/buildtools/ant/antlib.xml',
+        ant.taskdef(resource: 'org/codehaus/griffon/kotlin/antlib.xml',
                 classpathref: classpathId)
         
         ant.kotlinc(
             output: projectMainClassesDir,
-            src: kotlinSrc,
-            classpathref: classpathId)
+            classpathref: classpathId) {
+            src(path: kotlinSrc)
+            def excludedPaths = ['resources', 'i18n', 'conf'] // conf gets special handling
+            for(dir in new File("${basedir}/griffon-app").listFiles()) {
+                if(!excludedPaths.contains(dir.name) && dir.isDirectory() &&
+                    resolveResources("file:/${dir}/**/*.kt"))
+                    src(path: "$dir")
+            }
+        }
     } catch(Exception e) {
         if(argsMap.compileTrace) {
             GriffonExceptionHandler.sanitize(e)

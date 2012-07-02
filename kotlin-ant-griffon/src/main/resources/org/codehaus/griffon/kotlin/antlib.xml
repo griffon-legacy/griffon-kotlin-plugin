@@ -1,0 +1,5 @@
+<antlib>
+    <taskdef
+            name      = "kotlinc"
+            classname = "org.codehaus.griffon.kotlin.KotlincTask"/>
+</antlib>

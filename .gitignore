@@ -1,2 +1,13 @@
 target
 release_notes.md
+build
+kotlin-griffonPluginFixes.iml
+kotlin-griffonPlugins.iml
+kotlin.iml
+.idea
+kotlin-griffonPluginFixes.iml
+kotlin-griffonPlugins.iml
+kotlin.iml
+*.ipl
+*.iws
+.gradle
